@@ -486,15 +486,11 @@ def RectifLaz(x, y, z, transformation):
     Rotk[2, 1] = 0
     Rotk[2, 2] = 1
 
-    X = []
     x1 = []
     y1 = []
     z1 = []
-    i = 0
-    NewSize = len(x)
 
-    for i in range(NewSize):
-        X = [x[i], y[i], z[i]]
+    for X in zip(x, y, z):
         # PASSIVE ROTATION
         X = Rotw.dot(X)
         X = Rotfi.dot(X)
