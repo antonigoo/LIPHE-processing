@@ -63,6 +63,26 @@ OPTIONAL: Extra, ExtraBytes_name
 """
 
 
+def add_extra_bytes(las_content, extra_bytes_names):
+    import numpy as np
+    
+    # create empty extrabytes_array based on number of extra bytes and size of already existing bytes
+    extra_bytes_array = np.empty(
+        (len(extra_bytes_names), len(las_content.x)), dtype=np.float32
+    )
+
+    # fill extra bytes array with needed content
+    added_bytes = []
+    for x, name in enumerate(extra_bytes_names):
+        if hasattr(las_content, name):
+            extra_bytes_array[x] = getattr(las_content, name)
+            added_bytes.append(name)
+        else:
+            print(f"Could not find {name} in your lasfile, skipping.")
+    print(f"Your extrabytes: {*added_bytes,}")
+    return extra_bytes_array
+
+
 def Resample(LAZCONTENT, useroption, PCD, EXTRA=[], ExtraBytes_name=[]):
     import numpy as np
 
@@ -521,7 +541,7 @@ OUTPUT:X, Y, Z at ETRS89-TM35FIN reference system
 """
 
 
-def HELMERT3D(inFile, MatchPoints):
+def HELMERT3D(LAZCONTENT, MatchPoints):
     import numpy as np
 
     Lb = MatchPoints[
@@ -602,8 +622,6 @@ def HELMERT3D(inFile, MatchPoints):
     AFIM_I = np.linalg.inv(AFIM)
     print("DONE - ISOGONAL PARAMETERS ESTIMATION")
 
-    LAZCONTENT = inFile
-    NP = len(LAZCONTENT.x)
     x1 = []
     y1 = []
     z1 = []
@@ -613,9 +631,8 @@ def HELMERT3D(inFile, MatchPoints):
     z = LAZCONTENT.z - X[11]
 
     print("RUNNING CLOUD TRANSFORMATION")
-    for m in range(NP):
+    for P in zip(x, y, z):
         ##3D TRANSFORMATION
-        P = [x[m], y[m], z[m]]
         P_fid = AFIM_I.dot(P)
         x1.append(P_fid[0])
         y1.append(P_fid[1])
