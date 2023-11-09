@@ -1089,43 +1089,41 @@ def Ground_Normalize(LAZCONTENT, offsets, th, Extra=[], ExtraBytes_name=[]):
     Z = LAZCONTENT.z[P] - offsets[2]
 
     class TREE:
-        pass
+        x = X
+        y = Y
+        z = Z
 
-    setattr(TREE, "x", X)
-    setattr(TREE, "y", Y)
-    setattr(TREE, "z", Z)
-
-    if hasattr(LAZCONTENT, "return_number") == True:
+    if hasattr(LAZCONTENT, "return_number"):
         rn = LAZCONTENT.return_number[P]
         setattr(TREE, "return_number", rn)
-    if hasattr(LAZCONTENT, "number_of_returns") == True:
+    if hasattr(LAZCONTENT, "number_of_returns"):
         nr = LAZCONTENT.number_of_returns[P]
         setattr(TREE, "number_of_returns", nr)
-    if hasattr(LAZCONTENT, "intensity") == True:
+    if hasattr(LAZCONTENT, "intensity"):
         intensity = LAZCONTENT.intensity[P]
         setattr(TREE, "intensity", intensity)
-    if hasattr(LAZCONTENT, "Amplitude") == True:
+    if hasattr(LAZCONTENT, "Amplitude"):
         intensity = LAZCONTENT.Amplitude[P]
         setattr(TREE, "intensity", intensity)
-    if hasattr(LAZCONTENT, "scan_direction_flag") == True:
+    if hasattr(LAZCONTENT, "scan_direction_flag"):
         scan_direction_flag = LAZCONTENT.scan_direction_flag[P]
         setattr(TREE, "scan_direction_flag", scan_direction_flag)
-    if hasattr(LAZCONTENT, "edge_of_flight_line") == True:
+    if hasattr(LAZCONTENT, "edge_of_flight_line"):
         edge_of_flight_line = LAZCONTENT.edge_of_flight_line[P]
         setattr(TREE, "edge_of_flight_line", edge_of_flight_line)
-    if hasattr(LAZCONTENT, "classification") == True:
+    if hasattr(LAZCONTENT, "classification"):
         classification = LAZCONTENT.classification[P]
         setattr(TREE, "classification", classification)
-    if hasattr(LAZCONTENT, "scan_angle_rank") == True:
+    if hasattr(LAZCONTENT, "scan_angle_rank"):
         scan_angle_rank = LAZCONTENT.scan_angle_rank[P]
         setattr(TREE, "scan_angle_rank", scan_angle_rank)
-    if hasattr(LAZCONTENT, "user_data") == True:
+    if hasattr(LAZCONTENT, "user_data"):
         user_data = LAZCONTENT.user_data[P]
         setattr(TREE, "user_data", user_data)
-    if hasattr(LAZCONTENT, "gps_time") == True:
+    if hasattr(LAZCONTENT, "gps_time"):
         gps_time = LAZCONTENT.gps_time[P]
         setattr(TREE, "gps_time", gps_time)
-    if hasattr(LAZCONTENT, "rgb") == True:
+    if hasattr(LAZCONTENT, "rgb"):
         rgb = LAZCONTENT.rgb[P]
         setattr(TREE, "rgb", rgb)
 
@@ -1142,8 +1140,7 @@ def Ground_Normalize(LAZCONTENT, offsets, th, Extra=[], ExtraBytes_name=[]):
 
     if len(ExtraBytes_name) > 0:
         return TREE, EXTRA_TREE
-
-    if len(ExtraBytes_name) == 0:
+    else:
         return TREE
 
 

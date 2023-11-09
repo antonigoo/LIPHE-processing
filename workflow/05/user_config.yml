@@ -1,0 +1,35 @@
+
+
+# Function path
+function_path: /projappl/project_2008498/code/
+
+# Set path to laz2Np dll (Laspy can also be used here)
+DLLPATH: /projappl/project_2003180/samantha/treedb/src/LAZ2NP/OS_LINUX/Las2Array_StaticLibrary.so
+
+# Stem map
+tree_map: /projappl/project_2008498/code/workflow/04/TreeMap.xlsx
+
+# Digital terrain model
+DTM_NAME: /projappl/project_2008498/code/workflow/05/Heli_pts_tower200m_DTM_20cm.las
+
+# default thshold for removing ground points
+threshold: 1
+
+# Declare scan angular setup and resolution - LiPhe Setup 2020-2021
+thetaStart: 40
+thetaStop: 127 
+thetaIncrement: 0.006
+phiStart: 103.0 
+phiStop: 254.0
+phiIncrement: 0.006
+
+# Transformation parameters
+
+transformation:
+  w: 0
+  fi: -60
+  k: -90
+  x: 0
+  y: 0
+  z: 0
+
