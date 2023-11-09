@@ -757,13 +757,13 @@ def ClippingTree(
     # CHECKING USER OPTIONS
     if (
         (len(BOX_COORD) == 0)
-        & (len(BOX_ANGLES) == 0)
-        & (len(CYLINDER) == 0)
-        & (len(VORONOI) == 0)
+        and (len(BOX_ANGLES) == 0)
+        and (len(CYLINDER) == 0)
+        and (len(VORONOI) == 0)
     ):
         print("Please informe a valid clipping option")
 
-    if (len(BOX_COORD) > 0) & (len(BOX_ANGLES) == 0):
+    if (len(BOX_COORD) > 0) and (len(BOX_ANGLES) == 0):
         P = np.where(
             (LAZCONTENT.x > BOX_COORD[0])
             & (LAZCONTENT.y > BOX_COORD[1])
@@ -774,7 +774,7 @@ def ClippingTree(
         )
         P = np.array(P[:][0])
 
-    if (len(BOX_COORD) == 0) & (len(BOX_ANGLES) > 0):
+    if (len(BOX_COORD) == 0) and (len(BOX_ANGLES) > 0):
         P = np.where(
             (LAZCONTENT.Theta > BOX_ANGLES[0])
             & (LAZCONTENT.Phi > BOX_ANGLES[1])
@@ -785,7 +785,7 @@ def ClippingTree(
         )
         P = np.array(P[:][0])
 
-    if (len(BOX_COORD) > 0) & (len(BOX_ANGLES) > 0):
+    if (len(BOX_COORD) > 0) and (len(BOX_ANGLES) > 0):
         P = np.where(
             (LAZCONTENT.x > BOX_COORD[0])
             & (LAZCONTENT.y > BOX_COORD[1])
@@ -802,7 +802,7 @@ def ClippingTree(
         )
         P = np.array(P[:][0])
 
-    if (len(BOX_COORD) == 0) & (len(BOX_ANGLES) == 0) & (len(CYLINDER) > 0):
+    if (len(BOX_COORD) == 0) and (len(BOX_ANGLES) == 0) and (len(CYLINDER) > 0):
         Dx = LAZCONTENT.x - CYLINDER[0]
         Dy = LAZCONTENT.y - CYLINDER[1]
         Dz = LAZCONTENT.z - CYLINDER[2]
@@ -812,9 +812,9 @@ def ClippingTree(
 
     if (
         (len(BOX_COORD) == 0)
-        & (len(BOX_ANGLES) == 0)
-        & (len(CYLINDER) == 0)
-        & (len(VORONOI) > 0)
+        and (len(BOX_ANGLES) == 0)
+        and (len(CYLINDER) == 0)
+        and (len(VORONOI) > 0)
     ):
         print("VORONOI SEGMENTATION - MULTIPLE TREES")
         vor = Voronoi(VORONOI[0][:, 0:2])
@@ -877,37 +877,37 @@ def ClippingTree(
         z = LAZCONTENT.z[P]
         setattr(TREE, "z", z)
 
-        if hasattr(LAZCONTENT, "return_number") == True:
+        if hasattr(LAZCONTENT, "return_number"):
             rn = LAZCONTENT.return_number[P]
             setattr(TREE, "return_number", rn)
-        if hasattr(LAZCONTENT, "number_of_returns") == True:
+        if hasattr(LAZCONTENT, "number_of_returns"):
             nr = LAZCONTENT.number_of_returns[P]
             setattr(TREE, "number_of_returns", nr)
-        if hasattr(LAZCONTENT, "intensity") == True:
+        if hasattr(LAZCONTENT, "intensity"):
             intensity = LAZCONTENT.intensity[P]
             setattr(TREE, "intensity", intensity)
-        if hasattr(LAZCONTENT, "Amplitude") == True:
+        if hasattr(LAZCONTENT, "Amplitude"):
             intensity = LAZCONTENT.Amplitude[P]
             setattr(TREE, "intensity", intensity)
-        if hasattr(LAZCONTENT, "scan_direction_flag") == True:
+        if hasattr(LAZCONTENT, "scan_direction_flag"):
             scan_direction_flag = LAZCONTENT.scan_direction_flag[P]
             setattr(TREE, "scan_direction_flag", scan_direction_flag)
-        if hasattr(LAZCONTENT, "edge_of_flight_line") == True:
+        if hasattr(LAZCONTENT, "edge_of_flight_line"):
             edge_of_flight_line = LAZCONTENT.edge_of_flight_line[P]
             setattr(TREE, "edge_of_flight_line", edge_of_flight_line)
-        if hasattr(LAZCONTENT, "classification") == True:
+        if hasattr(LAZCONTENT, "classification"):
             classification = LAZCONTENT.classification[P]
             setattr(TREE, "classification", classification)
-        if hasattr(LAZCONTENT, "scan_angle_rank") == True:
+        if hasattr(LAZCONTENT, "scan_angle_rank"):
             scan_angle_rank = LAZCONTENT.scan_angle_rank[P]
             setattr(TREE, "scan_angle_rank", scan_angle_rank)
-        if hasattr(LAZCONTENT, "user_data") == True:
+        if hasattr(LAZCONTENT, "user_data"):
             user_data = LAZCONTENT.user_data[P]
             setattr(TREE, "user_data", user_data)
-        if hasattr(LAZCONTENT, "gps_time") == True:
+        if hasattr(LAZCONTENT, "gps_time"):
             gps_time = LAZCONTENT.gps_time[P]
             setattr(TREE, "gps_time", gps_time)
-        if hasattr(LAZCONTENT, "rgb") == True:
+        if hasattr(LAZCONTENT, "rgb"):
             rgb = LAZCONTENT.rgb[P]
             setattr(TREE, "rgb", rgb)
 
@@ -924,8 +924,7 @@ def ClippingTree(
 
         if len(ExtraBytes_name) > 0:
             return TREE, EXTRA_TREE
-
-        if len(ExtraBytes_name) == 0:
+        else:
             return TREE
 
     if len(VORONOI) > 0:
@@ -944,40 +943,40 @@ def ClippingTree(
             setattr(TREE, "y", y)
             z = LAZCONTENT.z[PP]
             setattr(TREE, "z", z)
-            setattr(TREE, "name", Tree_Name[j])
+            setattr(TREE, "name", Tree_Name[j])  # Tree_Name is not defined in all cases, be carefull 
             j = j + 1
 
-            if hasattr(LAZCONTENT, "return_number") == True:
+            if hasattr(LAZCONTENT, "return_number"):
                 rn = LAZCONTENT.return_number[PP]
                 setattr(TREE, "return_number", rn)
-            if hasattr(LAZCONTENT, "number_of_returns") == True:
+            if hasattr(LAZCONTENT, "number_of_returns"):
                 nr = LAZCONTENT.number_of_returns[PP]
                 setattr(TREE, "number_of_returns", nr)
-            if hasattr(LAZCONTENT, "intensity") == True:
+            if hasattr(LAZCONTENT, "intensity"):
                 intensity = LAZCONTENT.intensity[PP]
                 setattr(TREE, "intensity", intensity)
-            if hasattr(LAZCONTENT, "Amplitude") == True:
+            if hasattr(LAZCONTENT, "Amplitude"):
                 intensity = LAZCONTENT.Amplitude[PP]
                 setattr(TREE, "intensity", intensity)
-            if hasattr(LAZCONTENT, "scan_direction_flag") == True:
+            if hasattr(LAZCONTENT, "scan_direction_flag"):
                 scan_direction_flag = LAZCONTENT.scan_direction_flag[PP]
                 setattr(TREE, "scan_direction_flag", scan_direction_flag)
-            if hasattr(LAZCONTENT, "edge_of_flight_line") == True:
+            if hasattr(LAZCONTENT, "edge_of_flight_line"):
                 edge_of_flight_line = LAZCONTENT.edge_of_flight_line[PP]
                 setattr(TREE, "edge_of_flight_line", edge_of_flight_line)
-            if hasattr(LAZCONTENT, "classification") == True:
+            if hasattr(LAZCONTENT, "classification"):
                 classification = LAZCONTENT.classification[PP]
                 setattr(TREE, "classification", classification)
-            if hasattr(LAZCONTENT, "scan_angle_rank") == True:
+            if hasattr(LAZCONTENT, "scan_angle_rank"):
                 scan_angle_rank = LAZCONTENT.scan_angle_rank[PP]
                 setattr(TREE, "scan_angle_rank", scan_angle_rank)
-            if hasattr(LAZCONTENT, "user_data") == True:
+            if hasattr(LAZCONTENT, "user_data"):
                 user_data = LAZCONTENT.user_data[PP]
                 setattr(TREE, "user_data", user_data)
-            if hasattr(LAZCONTENT, "gps_time") == True:
+            if hasattr(LAZCONTENT, "gps_time"):
                 gps_time = LAZCONTENT.gps_time[PP]
                 setattr(TREE, "gps_time", gps_time)
-            if hasattr(LAZCONTENT, "rgb") == True:
+            if hasattr(LAZCONTENT, "rgb"):
                 rgb = LAZCONTENT.rgb[PP]
                 setattr(TREE, "rgb", rgb)
 
@@ -999,8 +998,7 @@ def ClippingTree(
 
         if len(ExtraBytes_name) > 0:
             return TREE_VORONOI, TREE_EXTRA_VORONOI
-
-        if len(ExtraBytes_name) == 0:
+        else:
             return TREE_VORONOI
 
 
