@@ -1,12 +1,12 @@
-import config
 import time
-import argparse
+import os
 import laspy
 import numpy as np
 from lbl_segmentation.run import run
 from utilities import util
 import warnings
-warnings.filterwarnings("ignore", category=DeprecationWarning) 
+
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 """
 Perform the entire segmentation process from start to finish for the tree with the given id.
@@ -27,8 +27,20 @@ Input:
                         because otherwise the algorithm does nothing at all). Default: False
 
 """
+
+
 def lbl_segment(
-    tree_id: int, x_offset: float = 0, y_offset: float = 0, verbose: bool = False, write_other = False, skip_matching = False
+    path_to_pc: str,
+    path_to_tree_map: str,
+    tree_id: int,
+    output_path_main: str,
+    output_path_noise: str,
+    x_offset: float = 0,
+    y_offset: float = 0,
+    verbose: bool = False,
+    write_other: bool = False,
+    skip_matching: bool = False,
+    ref_dist_max: int = 2,
 ) -> None:
     if skip_matching and not write_other:
         write_other = True
@@ -43,11 +55,13 @@ def lbl_segment(
         data_time = time.time()
 
     # Read point cloud and reference data from file
-    pc = laspy.read(config.PATH + config.PC_DIRECTORY + config.PC_FILENAME.format(TREEID = tree_id))
-    ref_coords = util.get_ref_coords(config.PATH + config.REF_DIRECTORY + config.REF_FILENAME, tree_id)
+    pc = laspy.read(path_to_pc)
+    ref_coords = util.get_ref_coords(path_to_tree_map, tree_id)
     if not skip_matching and ref_coords.size == 0:
         print(f"No matching reference data found for tree with id {tree_id}!")
-        print("If you want to perform segmentation without reference data, set skip matching to True.")
+        print(
+            "If you want to perform segmentation without reference data, set skip matching to True."
+        )
         print("Terminating...")
         return
 
@@ -65,7 +79,7 @@ def lbl_segment(
     if skip_matching:
         matches = np.array([])
     else:
-        matches = util.match_locations(tree_coords, ref_coords, config.REF_DIST_MAX)
+        matches = util.match_locations(tree_coords, ref_coords, ref_dist_max)
         if matches.size == 0:
             # Alert the user if no segment matches the reference tree
             print("WARNING: no matching segment found for the reference tree!")
@@ -73,8 +87,7 @@ def lbl_segment(
         print("Writing tree segments to separate .las files...")
         write_time = time.time()
     util.write_segments(
-        tree_pcs, matches, config.PATH + config.DEST_DIRECTORY_MAIN, config.PC_FILENAME.format(TREEID = tree_id),
-        config.PATH + config.DEST_DIRECTORY_OTHER.format(TREEID = tree_id), write_other, verbose
+        tree_pcs, matches, output_path_main, os.path.basename(path_to_pc), output_path_noise, write_other, verbose
     )
     if verbose:
         print(f"Finish in {(time.time() - write_time):.3f} s")
@@ -86,59 +99,3 @@ def lbl_segment(
         print(end_txt)
         print(end_t_txt)
         print("-" * line_len)
-    
-
-"""
-Command line executable of the segmentation process
-
-------
-Options:
-    -i="tree_id" or --id="tree_id"      -   set the id of the tree for which the segmentation is performed
-    -r="file"    or --read="file"       -   read a list of tree ids from a file, then perform segmentation
-                                            for each of them. Default file name: id_list.txt.
-    -v or --verbose                     -   if set, print information during the segmentation process
-    -o or --other                       -   if set, write other identified segments aside from the tree
-    -x or --xoffset                     -   define the x offset applied to the point cloud when matching to
-                                            reference data
-    -y or --yoffset                     -   ^ for y coordinates
-    -s or --skip                        -   skip matching segments to reference data. If set, will automatically
-                                            set -o as well.
-
-!!! NOTE: -i and -r are mutually exclusive options. If both are set, only -i is taken into account. 
-    Furthermore, note that -r is the default option, i.e. if no options are given, the program will
-    attempt to read the plot ids from a file called id_list.txt in config.PATH !!!
-"""
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description = "Segment trees from a point cloud")
-    parser.add_argument("-i", "--id", help = "Set id of the plot to segment", default = None)
-    parser.add_argument("-r", "--read", help = "Read a list of tree ids from file", default = "id_list.txt")
-    parser.add_argument("-v", "--verbose", help = "Print information during the segmentation process", action = "store_true")
-    parser.add_argument("-o", "--other", help = "Write other identified segments aside from the tree", action = "store_true")
-    parser.add_argument("-x", "--xoffset", help = "x offset applied to the point cloud", default = 0)
-    parser.add_argument("-y", "--yoffset", help = "y offset applied to the point cloud", default = 0)
-    parser.add_argument("-s", "--skip", help = "Skip matching segments to reference data. If True, will automatically set -o to True as well", action = "store_true")
-    args = parser.parse_args()
-    argdict = vars(args)
-    tree_id, filename, verbose = argdict["id"], argdict["read"], argdict["verbose"]
-    write_other, x_offset, y_offset = argdict["other"], argdict["xoffset"], argdict["yoffset"]
-    skip_matching = argdict["skip"]
-    if tree_id == None:
-        id_list = util.get_id_list(filename)
-        for tree_id in id_list:
-            lbl_segment(tree_id)
-    else:
-        raise_error = False
-        try:
-            tree_id = int(tree_id)
-        except ValueError:
-            raise_error = True
-        if tree_id <= 0:
-            raise_error = True
-        if raise_error:    
-            raise ValueError("The tree id should be a positive integer.")
-        try:
-            x_offset = float(x_offset)
-            y_offset = float(y_offset)
-        except ValueError:
-            raise ValueError("The x and y offset should be floats.")
-        lbl_segment(tree_id, x_offset, y_offset, verbose, write_other, skip_matching)

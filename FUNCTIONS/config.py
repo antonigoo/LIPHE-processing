@@ -39,9 +39,9 @@ REF_DIST_MAX            |   Maximum distance between a segment and reference tre
                     |   that the two can still be considered a match (meters)
 
 """
-PATH = "G:/DATASET/WEEKLY/STEM_MAP_TREES/NORM"
+PATH = "/scratch/project_2008498/antongoo/fgi/data/output"
 
-PC_DIRECTORY = "/200704_000502"
+PC_DIRECTORY = "/single_trees_normalized_to_ground"
 
 PC_FILENAME = "/200704_000502_R_georef{TREEID}.las"
 
