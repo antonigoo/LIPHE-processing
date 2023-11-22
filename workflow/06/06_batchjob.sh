@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH --job-name=06_fine_segmentation
 #SBATCH --account=project_2008498
-#SBATCH --time=01:05:00
+#SBATCH --time=00:10:00
 #SBATCH --ntasks=1
-#SBATCH --mem-per-cpu=30G
+#SBATCH --mem-per-cpu=5G
 #SBATCH --partition=small
 
 module load geoconda
