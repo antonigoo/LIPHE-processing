@@ -527,6 +527,95 @@ def RectifLaz(x, y, z, transformation):
     return x1, y1, z1
 
 
+def _run_in_parallel(params):
+    xyz, Rotw, Rotfi, Rotk, aX, aY, aZ = params
+    x1 = []
+    y1 = []
+    z1 = []
+    for X in xyz:
+        # PASSIVE ROTATION
+        X = Rotw.dot(X)
+        X = Rotfi.dot(X)
+        X = Rotk.dot(X)
+        # ADD TRANSLATION TO AVOID NEGATIVE VALUES
+        x1.append(X[0] + aX)
+        y1.append(X[1] + aY)
+        z1.append(X[2] + aZ)
+    return x1, y1, z1
+
+def rectify_point_cloud_parallel(x, y, z, transformation, num_cores=1):
+    import math
+    import numpy as np
+    from multiprocessing import Pool
+    from itertools import chain
+
+    w = transformation.w * math.pi / 180
+    fi = transformation.fi * math.pi / 180
+    k = transformation.k * math.pi / 180
+
+    aX = transformation.x
+    aY = transformation.y
+    aZ = transformation.z
+
+    Rotfi = np.empty((3, 3), dtype="float32")
+    Rotfi[0, 0] = math.cos(fi)
+    Rotfi[0, 1] = 0
+    Rotfi[0, 2] = math.sin(fi)
+    Rotfi[1, 0] = 0
+    Rotfi[1, 1] = 1
+    Rotfi[1, 2] = 0
+    Rotfi[2, 0] = -math.sin(fi)
+    Rotfi[2, 1] = 0
+    Rotfi[2, 2] = math.cos(fi)
+
+    Rotw = np.empty((3, 3), dtype="float32")
+    Rotw[0, 0] = 1
+    Rotw[0, 1] = 0
+    Rotw[0, 2] = 0
+    Rotw[1, 0] = 0
+    Rotw[1, 1] = math.cos(w)
+    Rotw[1, 2] = -math.sin(w)
+    Rotw[2, 0] = 0
+    Rotw[2, 1] = math.sin(w)
+    Rotw[2, 2] = math.cos(w)
+
+    Rotk = np.empty((3, 3), dtype="float32")
+    Rotk[0, 0] = math.cos(k)
+    Rotk[0, 1] = -math.sin(k)
+    Rotk[0, 2] = 0
+    Rotk[1, 0] = math.sin(k)
+    Rotk[1, 1] = math.cos(k)
+    Rotk[1, 2] = 0
+    Rotk[2, 0] = 0
+    Rotk[2, 1] = 0
+    Rotk[2, 2] = 1
+
+    coordinates = list(zip(x, y, z))
+    coordinates = np.array_split(coordinates, num_cores)
+
+    aX_params = [aX] * len(coordinates)
+    aY_params = [aY] * len(coordinates)
+    aZ_params = [aZ] * len(coordinates)
+    Rotw_params = [Rotw] * len(coordinates)
+    Rotfi_params = [Rotfi] * len(coordinates)
+    Rotk_params = [Rotk] * len(coordinates)
+
+    call_args = zip(coordinates, Rotw_params, Rotfi_params, Rotk_params, aX_params, aY_params, aZ_params)
+
+    pool = Pool(num_cores)
+    results = pool.map(_run_in_parallel, call_args)
+    pool.close()
+    x1 = list(chain(*[t[0] for t in results]))
+    x1 = np.array(x1, dtype=np.float64)
+
+    y1 = list(chain(*[t[1] for t in results]))
+    y1 = np.array(y1, dtype=np.float64)
+
+    z1 = list(chain(*[t[2] for t in results]))
+    z1 = np.array(z1, dtype=np.float64)
+
+    return x1, y1, z1
+
 """ 
 ----------------------------POINT CLOUD GEOREFERENCING----------------------------
 THIS FUNCTION CAN BE USED TO REGISTER OR GEOREFERENCE A POINT CLOUD CONSIDERING KNOWN MATCHING POINTS OR CONTROL POINTS
@@ -1032,21 +1121,25 @@ def COMPUTE_EXTRA_PARAMETERS(
     aux12 = (LAZCONTENT.y) ** 2
     aux13 = (LAZCONTENT.z) ** 2
     Range = np.sqrt(aux11 + aux12 + aux13)
-    phi = []
-    theta = []
+    
     phi = np.arctan2(LAZCONTENT.y, LAZCONTENT.x)
     IDX1 = phi < 0
     phi[IDX1] = 2 * math.pi + phi[IDX1]
+
     IDX2 = phi < (phiStart * math.pi / 180)
     phi[IDX2] = phiStart * math.pi / 180
+
     IDX3 = phi > (phiStop * math.pi / 180)
     phi[IDX3] = phiStop * math.pi / 180
+    
     del IDX1, IDX2, IDX3, aux11, aux12, aux13
+
     theta = np.arccos((LAZCONTENT.z) / Range)
     IDX1 = theta < (thetaStart * math.pi / 180)
     theta[IDX1] = thetaStart * math.pi / 180
     IDX2 = theta > (thetaStop * math.pi / 180)
     theta[IDX2] = thetaStop * math.pi / 180
+    
     del IDX1, IDX2
 
     NP = len(LAZCONTENT.x)

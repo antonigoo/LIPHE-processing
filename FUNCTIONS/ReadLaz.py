@@ -34,8 +34,7 @@ import numpy as np
 import time
 import gc
 
-def ReadLaz (inputLas, DLLPATH, n_threads=[]):
-
+def ReadLaz(inputLas, DLLPATH, n_threads=1):
     t1_start = time.perf_counter()
     t2_start = time.process_time()
 
@@ -53,26 +52,19 @@ def ReadLaz (inputLas, DLLPATH, n_threads=[]):
     #LOADING C FUNCTION TO READ WITH LASZIP
     libCalc=CDLL(DLLPATH)
     
-    if n_threads!=[]:
-       DATA=libCalc.Read_Parallel
-       print("\n You are using %d cores" % n_threads)
-  
-    if n_threads==[]:
-       n_threads=1       
-       DATA=libCalc.Read
+    if n_threads == 1:
+       DATA = libCalc.Read
        print("\n You are running a single thread")
-    
+    else:
+       DATA = libCalc.Read_Parallel
+       print(f"\n You are using {n_threads} cores")
 
     
-    FREEMEMO=libCalc.freeme
-    
+    FREEMEMO = libCalc.freeme
+
     #DECLARING NUMPY ARRAYS
     #void Data(char* name, double*&x, double*&y, double*&z, int *&return_number,  int *&number_of_returns ,float *&intensity);
-    
 
-       
-        
-        
     DATA.argtypes = [(c_char_p),
                  POINTER(POINTER(c_double)), POINTER(POINTER(c_double)), POINTER(POINTER(c_double)), #X,Y,Z
                  POINTER(POINTER(c_float)), #intensity
@@ -192,10 +184,10 @@ def ReadLaz (inputLas, DLLPATH, n_threads=[]):
     print ("LAZ CONTENT:", Default_atributes)   
     print ("LAZ EXTRA BYTES: ExtraBytes_name", ExtraBytes_name) 
     
-    
-#    FREEMEMO(x, y , z, 
-#            return_number, number_of_returns,
-#            intensity, pm, attributes_names, number_attributes)
+    # This will give a segmentation fault if uncommented
+    # FREEMEMO(x, y , z, 
+    #         return_number, number_of_returns,
+    #         intensity, pm, attributes_names, number_attributes)
     
     gc.collect() 
     del x, y, z, return_number, number_of_returns, intensity, classification, pm, attributes_names, extra

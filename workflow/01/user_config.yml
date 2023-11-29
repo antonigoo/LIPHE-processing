@@ -24,7 +24,6 @@ phiStop: 254.0
 phiIncrement: 0.006
 
 # Transformation parameters
-
 transformation:
   w: 0
   fi: -60
@@ -33,3 +32,5 @@ transformation:
   y: 0
   z: 0
 
+# Number of cores used for parallel reading
+cores: 1

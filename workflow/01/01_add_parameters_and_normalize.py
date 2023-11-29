@@ -24,7 +24,7 @@ import numpy as np
 input_las_filename = sys.argv[1]
 output_las_filename = sys.argv[2]
 
-las_content = ReadLaz.ReadLaz(input_las_filename, config["DLLPATH"])
+las_content = ReadLaz.ReadLaz(input_las_filename, config["DLLPATH"], int(config["cores"]))
 
 # Normalize point cloud local reference system
 # create class from transformation parameters in configuration file
@@ -33,10 +33,14 @@ class Transformation:
         for k, v in config["transformation"].items():
             setattr(self, k, v)
 
-
-x1, y1, z1 = Processing.RectifLaz(
-    las_content.x, las_content.y, las_content.z, Transformation(config)
-)
+if int(config["cores"]) == 1:
+    x1, y1, z1 = Processing.RectifLaz(
+        las_content.x, las_content.y, las_content.z, Transformation(config)
+    )
+else:
+    x1, y1, z1 = Processing.rectify_point_cloud_parallel(
+        las_content.x, las_content.y, las_content.z, Transformation(config), int(config["cores"])
+    )
 
 # Add extrabytes
 extra_bytes_names = ["Reflectance", "Deviation"]
