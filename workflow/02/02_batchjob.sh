@@ -6,9 +6,13 @@
 #SBATCH --mem-per-cpu=200G
 #SBATCH --partition=small
 
-module load geoconda
+module purge
+export PATH="/projappl/project_2003180/samantha/bin:$PATH"
 
-input_las=/scratch/project_2008498/antongoo/fgi/data/output/200406_100502_normalized.las
-output_las=/scratch/project_2008498/antongoo/fgi/data/output/200406_100502_georef.las
+BASE_PATH="/scratch/project_2008498/antongoo/fgi/test_data/"
+BASE_NAME="200406_100502_Sample"
+
+input_las="${BASE_PATH}output/${BASE_NAME}_normalized.las"
+output_las="${BASE_PATH}output/${BASE_NAME}_georef.las"
 
 srun python 02_georeference.py $input_las $output_las
