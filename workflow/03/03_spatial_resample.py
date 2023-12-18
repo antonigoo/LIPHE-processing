@@ -35,7 +35,7 @@ spatial_resample, extra_resample = Processing.Spatial_sample(
     las_content,
     useroption="neighbour",
     pts_min=1,
-    vs=0.05,
+    vs=0.01,
     npoints=1,
     EXTRA=extra_bytes_array,
     ExtraBytes_name=extra_bytes_names,
