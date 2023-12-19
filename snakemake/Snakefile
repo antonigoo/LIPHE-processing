@@ -1,9 +1,7 @@
-rule 01_add_parameters_and_normalize:
+rule add_parameters_and_normalize:
     input:
-        BASE_PATH = "/scratch/project_2008498/antongoo/fgi/snakemake/",
-        BASE_NAME = "200406_100502_Sample",
-        input_las = "{input.BASE_PATH}{input.BASE_NAME}.laz"
+        "{BASE_PATH}/{BASE_NAME}.laz"
     output:
-        "{input.BASE_PATH}output/{input.BASE_NAME}_normalized.las"
-    script:
-        "../workflow/01/01_add_parameters_and_normalize.py {input.input_las} {output}"
+        "{BASE_PATH}/output/{BASE_NAME}_normalized.las"
+    shell:
+        "srun python ../workflow/01/01_add_parameters_and_normalize.py {input} {output}"

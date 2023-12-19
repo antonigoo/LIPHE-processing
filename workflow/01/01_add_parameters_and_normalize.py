@@ -1,6 +1,8 @@
 import sys
 import os
 
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 # load user configurations from external file
 import yaml
 
@@ -8,14 +10,12 @@ with open("user_config.yml", "r") as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
 
 # add functions to path
-os.chdir(config["function_path"])
 sys.path.append(os.path.join(config["function_path"], "Functions"))
 
 # custom packages
 import ReadLaz
 import Processing
 import WriteLaz
-
 
 # other python libraries
 import numpy as np
