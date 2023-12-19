@@ -1,7 +1,53 @@
+rule all:
+    input:
+        "{BASE_PATH}/output/final.txt"
+
 rule add_parameters_and_normalize:
     input:
         "{BASE_PATH}/{BASE_NAME}.laz"
     output:
         "{BASE_PATH}/output/{BASE_NAME}_normalized.las"
     shell:
-        "srun python ../workflow/01/01_add_parameters_and_normalize.py {input} {output}"
+        "python ../workflow/01/01_add_parameters_and_normalize.py {input} {output}"
+
+rule georeference:
+    input:
+        "{BASE_PATH}/output/{BASE_NAME}_normalized.las"
+    output:
+        "{BASE_PATH}/output/{BASE_NAME}_georef.las"
+    shell:
+        "python ../workflow/02/02_georeference.py {input} {output}"
+
+rule spatial_resample:
+    input:
+        "{BASE_PATH}/output/{BASE_NAME}_georef.las"
+    output:
+        "{BASE_PATH}/output/{BASE_NAME}_resampled.las"
+    shell:
+        "python ../workflow/03/03_spatial_resample.py {input} {output}"
+
+rule clipping_trees:
+    input:
+        "{BASE_PATH}/output/{BASE_NAME}_georef.las"
+    output:
+        "{BASE_PATH}/output/single_trees/"
+    shell:
+        "python ../workflow/04/04_clipping_trees.py {input} {output}"
+
+rule normalize_to_ground:
+    input:
+        "{BASE_PATH}/output/single_trees/"
+    output:
+        "{BASE_PATH}/output/single_trees_normalized_to_ground/"
+    shell:
+        "python ../workflow/05/05_normalize_to_ground.py {input} {output}"
+
+rule fine_segmentation:
+    input:
+        "{BASE_PATH}/output/single_trees_normalized_to_ground/"
+    output:
+        output_las_dir: "{BASE_PATH}/output/fine_segmnentation/", 
+        output_noise_dir: "{BASE_PATH}/output/fine_segmnentation_noise/",
+        final_result: "{BASE_PATH}/output/final.txt"
+    shell:
+        "python ../workflow/06/06_fine_segmentation.py {input} {output.output_las_dir} {output.output_noise_dir}"

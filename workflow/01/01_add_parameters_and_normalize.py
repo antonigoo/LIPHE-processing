@@ -1,11 +1,10 @@
 import sys
 import os
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
 # load user configurations from external file
 import yaml
 
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 with open("user_config.yml", "r") as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
 

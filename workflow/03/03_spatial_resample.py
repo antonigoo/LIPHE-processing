@@ -4,11 +4,12 @@ import os
 # load user configurations from external file
 import yaml
 
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 with open("user_config.yml", "r") as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
 
 # add functions to path
-os.chdir(config["function_path"])
+# os.chdir(config["function_path"])
 sys.path.append(os.path.join(config["function_path"], "Functions"))
 
 # custom packages
