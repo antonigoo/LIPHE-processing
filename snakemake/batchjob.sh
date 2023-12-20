@@ -13,4 +13,4 @@ module purge
 export PATH="/projappl/project_2003180/samantha/bin:$PATH"
 module load snakemake
 
-snakemake --cores 1 -np /scratch/project_2008498/antongoo/fgi/test_data/output/
+snakemake -np --dag --cores 1 /scratch/project_2008498/antongoo/fgi/snakemake/output/fine_segmentation/200406_100502_Sample_resample0.05__resampled_12314.laz

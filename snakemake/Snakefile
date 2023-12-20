@@ -1,3 +1,10 @@
+# rule all:
+#     input:
+#         original = "/scratch/project_2008498/antongoo/fgi/snakemake/200406_100502_Sample_resample0.05.laz",
+#         step_01 = "/scratch/project_2008498/antongoo/fgi/snakemake/200406_100502_Sample_resample0.05__normalized.las",
+#         step_02 = "/scratch/project_2008498/antongoo/fgi/snakemake/200406_100502_Sample_resample0.05__georef.las",
+#         step_03 = "/scratch/project_2008498/antongoo/fgi/snakemake/200406_100502_Sample_resample0.05__spatial_resample.las"
+
 rule add_parameters_and_normalize:
     input:
         "{BASE_PATH}/{BASE_NAME}.laz"
@@ -24,26 +31,25 @@ rule spatial_resample:
 
 rule clipping_trees:
     input:
-        "{BASE_PATH}/output/{BASE_NAME}_georef.las"
+        "{BASE_PATH}/output/{BASE_NAME}_resampled.las"
     output:
-        "{BASE_PATH}/output/single_trees/"
+        "{BASE_PATH}/output/single_trees/{BASE_NAME}_resampled_{TREE_ID}.laz"
     shell:
         "python ../workflow/04/04_clipping_trees.py {input} {output}"
 
 rule normalize_to_ground:
     input:
-        "{BASE_PATH}/output/single_trees/"
+        "{BASE_PATH}/output/single_trees/{BASE_NAME}_resampled_{TREE_ID}.laz"
     output:
-        "{BASE_PATH}/output/single_trees_normalized_to_ground/"
+        "{BASE_PATH}/output/single_trees_normalized_to_ground/{BASE_NAME}_resampled_{TREE_ID}.laz"
     shell:
         "python ../workflow/05/05_normalize_to_ground.py {input} {output}"
 
 rule fine_segmentation:
     input:
-        "{BASE_PATH}/output/single_trees_normalized_to_ground/"
+        "{BASE_PATH}/output/single_trees_normalized_to_ground/{BASE_NAME}_resampled_{TREE_ID}.laz"
     output:
-        output_las_dir = "{BASE_PATH}/output/fine_segmnentation/", 
-        output_noise_dir = "{BASE_PATH}/output/fine_segmnentation_noise/",
-        final_result = "{BASE_PATH}/output/final.txt"
+        "{BASE_PATH}/output/fine_segmentation/{BASE_NAME}_resampled_{TREE_ID}.laz"
+
     shell:
-        "python ../workflow/06/06_fine_segmentation.py {input} {output.output_las_dir} {output.output_noise_dir}"
+        "python ../workflow/06/06_fine_segmentation.py"
