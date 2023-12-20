@@ -1,7 +1,3 @@
-rule all:
-    input:
-        "{BASE_PATH}/output/final.txt"
-
 rule add_parameters_and_normalize:
     input:
         "{BASE_PATH}/{BASE_NAME}.laz"
@@ -46,8 +42,8 @@ rule fine_segmentation:
     input:
         "{BASE_PATH}/output/single_trees_normalized_to_ground/"
     output:
-        output_las_dir: "{BASE_PATH}/output/fine_segmnentation/", 
-        output_noise_dir: "{BASE_PATH}/output/fine_segmnentation_noise/",
-        final_result: "{BASE_PATH}/output/final.txt"
+        output_las_dir = "{BASE_PATH}/output/fine_segmnentation/", 
+        output_noise_dir = "{BASE_PATH}/output/fine_segmnentation_noise/",
+        final_result = "{BASE_PATH}/output/final.txt"
     shell:
         "python ../workflow/06/06_fine_segmentation.py {input} {output.output_las_dir} {output.output_noise_dir}"

@@ -13,4 +13,4 @@ module purge
 export PATH="/projappl/project_2003180/samantha/bin:$PATH"
 module load snakemake
 
-snakemake --cores 1 -np
+snakemake --cores 1 -np /scratch/project_2008498/antongoo/fgi/test_data/output/
