@@ -1,17 +1,10 @@
-# rule all:
-#     input:
-#         original = "/scratch/project_2008498/antongoo/fgi/snakemake/200406_100502_Sample_resample0.05.laz",
-#         step_01 = "/scratch/project_2008498/antongoo/fgi/snakemake/200406_100502_Sample_resample0.05__normalized.las",
-#         step_02 = "/scratch/project_2008498/antongoo/fgi/snakemake/200406_100502_Sample_resample0.05__georef.las",
-#         step_03 = "/scratch/project_2008498/antongoo/fgi/snakemake/200406_100502_Sample_resample0.05__spatial_resample.las"
-
 rule add_parameters_and_normalize:
     input:
         "{BASE_PATH}/{BASE_NAME}.laz"
     output:
         "{BASE_PATH}/output/{BASE_NAME}_normalized.las"
     shell:
-        "python ../workflow/01/01_add_parameters_and_normalize.py {input} {output}"
+        "python ../workflow/01/01_add_parameters_and_normalize.py"
 
 rule georeference:
     input:
