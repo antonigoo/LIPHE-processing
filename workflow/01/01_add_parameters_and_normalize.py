@@ -19,9 +19,8 @@ import WriteLaz
 # other python libraries
 import numpy as np
 
-
-input_las_filename = sys.argv[1]
-output_las_filename = sys.argv[2]
+input_las_filename = snakemake.input[0]
+output_las_filename = snakemake.output[0]
 
 las_content = ReadLaz.ReadLaz(input_las_filename, config["DLLPATH"], int(config["cores"]))
 
