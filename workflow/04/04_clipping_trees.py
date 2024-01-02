@@ -23,8 +23,8 @@ import numpy as np
 import pandas as pd
 
 
-input_las_filename = sys.argv[1]
-output_dir = sys.argv[2]
+input_las_filename = snakemake.input[0]
+output_dir = f"{snakemake.wildcards.BASE_PATH}/output/single_trees/"
 
 las_content = ReadLaz.ReadLaz(input_las_filename, config["DLLPATH"])
 

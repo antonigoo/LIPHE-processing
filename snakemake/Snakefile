@@ -26,7 +26,7 @@ rule clipping_trees:
     input:
         "{BASE_PATH}/output/{BASE_NAME}_resampled.las"
     output:
-        "{BASE_PATH}/output/single_trees/{BASE_NAME}_resampled_{TREE_ID}.laz"
+        "{BASE_PATH}/output/single_trees/{BASE_NAME}_resampled_{TREE_ID}.laz",
     script:
         "../workflow/04/04_clipping_trees.py"
 
