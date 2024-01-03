@@ -69,7 +69,7 @@ for k in range(N_trees):
     # write the tree to file
     output_las_filename = (
         output_dir
-        + os.path.split(input_las_filename)[-1].split(".")[0]
+        + os.path.split(input_las_filename)[-1].rsplit(".", 1)[0]
         + "_"
         + str(ID[k])
         + ".laz"

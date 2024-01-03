@@ -24,9 +24,8 @@ import pandas as pd
 import glob
 from scipy.interpolate import griddata
 
-
-input_las_dir = sys.argv[1]
-output_dir = sys.argv[2]
+input_las_dir = f"{snakemake.wildcards.BASE_PATH}/output/single_trees/"
+output_dir = f"{snakemake.wildcards.BASE_PATH}/output/single_trees_normalized_to_ground/"
 input_files_list = glob.glob(input_las_dir + "/*.laz")
 
 # Load stem map
@@ -50,7 +49,7 @@ offsets_local = np.zeros((3), dtype=np.float32)
 for i, input_file in enumerate(input_files_list):
     # I guess tree_id == the number at the end of the filename of single tree las
     tree_id = int(
-        os.path.basename(input_file).split(".")[0].split("_")[-1]
+        os.path.basename(input_file).rsplit(".", 1)[0].split("_")[-1]
     )
 
     las_content = ReadLaz.ReadLaz(input_file, config["DLLPATH"])

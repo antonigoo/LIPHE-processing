@@ -42,7 +42,7 @@ rule fine_segmentation:
     input:
         "{BASE_PATH}/output/single_trees_normalized_to_ground/{BASE_NAME}_resampled_{TREE_ID}.laz"
     output:
-        output_files = "{BASE_PATH}/output/fine_segmentation/{BASE_NAME}_resampled_{TREE_ID}.laz",
-        output_files_noise = "{BASE_PATH}/output/fine_segmentation_noise/{BASE_NAME}_resampled_{TREE_ID}.laz"
+        "{BASE_PATH}/output/fine_segmentation/{BASE_NAME}_resampled_{TREE_ID}.laz",
+        "{BASE_PATH}/output/fine_segmentation_noise/{BASE_NAME}_resampled_{TREE_ID}.laz"
     script:
         "../workflow/06/06_fine_segmentation.py"

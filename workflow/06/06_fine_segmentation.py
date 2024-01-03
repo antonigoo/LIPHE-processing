@@ -20,16 +20,17 @@ import lbl_segment
 import glob
 
 
-input_las_dir = sys.argv[1]
-output_las_dir = sys.argv[2]
-output_noise_dir = sys.argv[3]
+input_las_dir = f"{snakemake.wildcards.BASE_PATH}/output/single_trees_normalized_to_ground/"
+output_las_dir = f"{snakemake.wildcards.BASE_PATH}/output/fine_segmentation/"
+output_noise_dir = f"{snakemake.wildcards.BASE_PATH}/output/fine_segmentation_noise/"
 input_files_list = glob.glob(input_las_dir + "/*.laz")
 
 for input_file in input_files_list:
     # I guess tree_id == the number at the end of the filename of single tree las
     tree_id = int(
-        os.path.basename(input_file).split(".")[0].split("_")[-1]
+        os.path.basename(input_file).rsplit(".", 1)[0].split("_")[-1]
     )
+    print(f"tree id {tree_id}")
     output_pc = output_las_dir + os.path.basename(input_file)
     output_noise = output_noise_dir + os.path.basename(input_file)
 
