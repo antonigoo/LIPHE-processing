@@ -1,3 +1,17 @@
+
+configfile: "config.json"
+
+def get_tree_ids():
+    import pandas as pd
+    df = pd.read_excel(config["TREE_IDS_SOURCE_FILE"])
+    return list(df.TREE_ID)
+
+TREE_ID = get_tree_ids()
+
+rule all:
+    input:
+        expand("{base_path}/output/fine_segmentation/{base_name}_{tree_id}.laz", base_path=config["BASE_PATH"], base_name=config["BASE_NAME"], tree_id=TREE_ID)
+    
 rule add_parameters_and_normalize:
     input:
         "{BASE_PATH}/{BASE_NAME}.laz"
@@ -8,7 +22,7 @@ rule add_parameters_and_normalize:
 
 rule georeference:
     input:
-        "{BASE_PATH}/output/{BASE_NAME}_normalized.las"
+        rules.add_parameters_and_normalize.output
     output:
         "{BASE_PATH}/output/{BASE_NAME}_georef.las"
     script:
@@ -16,33 +30,42 @@ rule georeference:
 
 rule spatial_resample:
     input:
-        "{BASE_PATH}/output/{BASE_NAME}_georef.las"
+        rules.georeference.output
     output:
         "{BASE_PATH}/output/{BASE_NAME}_resampled.las"
     script:
         "../workflow/03/03_spatial_resample.py"
 
 rule clipping_trees:
+    params:
+        output_dir = "{BASE_PATH}/output/single_trees/"
     input:
-        "{BASE_PATH}/output/{BASE_NAME}_resampled.las"
+        rules.georeference.output
     output:
-        "{BASE_PATH}/output/single_trees/{BASE_NAME}_resampled_{TREE_ID}.laz",
+        expand("{{BASE_PATH}}/output/single_trees/{{BASE_NAME}}_{TREE_ID}.laz", TREE_ID=TREE_ID)
     script:
         "../workflow/04/04_clipping_trees.py"
 
 rule normalize_to_ground:
+    params:
+        input_dir = "{BASE_PATH}/output/single_trees/",
+        output_dir = "{BASE_PATH}/output/single_trees_normalized_to_ground/"
     input:
-        "{BASE_PATH}/output/single_trees/{BASE_NAME}_resampled_{TREE_ID}.laz"
+        rules.clipping_trees.output
     output:
-        "{BASE_PATH}/output/single_trees_normalized_to_ground/{BASE_NAME}_resampled_{TREE_ID}.laz"
+        expand("{{BASE_PATH}}/output/single_trees_normalized_to_ground/{{BASE_NAME}}_{TREE_ID}.laz", TREE_ID=TREE_ID)
     script:
         "../workflow/05/05_normalize_to_ground.py"
 
 rule fine_segmentation:
+    params:
+        input_dir = "{BASE_PATH}/output/single_trees_normalized_to_ground/",
+        output_dir = "{BASE_PATH}/output/fine_segmentation/",
+        output_dir_noise = "{BASE_PATH}/output/fine_segmentation_noise/"
     input:
-        "{BASE_PATH}/output/single_trees_normalized_to_ground/{BASE_NAME}_resampled_{TREE_ID}.laz"
+        rules.normalize_to_ground.output
     output:
-        "{BASE_PATH}/output/fine_segmentation/{BASE_NAME}_resampled_{TREE_ID}.laz",
-        "{BASE_PATH}/output/fine_segmentation_noise/{BASE_NAME}_resampled_{TREE_ID}.laz"
+        expand("{{BASE_PATH}}/output/fine_segmentation/{{BASE_NAME}}_{TREE_ID}.laz", TREE_ID=TREE_ID),
+        expand("{{BASE_PATH}}/output/fine_segmentation_noise/{{BASE_NAME}}_{TREE_ID}.laz", TREE_ID=TREE_ID)
     script:
         "../workflow/06/06_fine_segmentation.py"

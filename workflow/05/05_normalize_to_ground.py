@@ -24,8 +24,8 @@ import pandas as pd
 import glob
 from scipy.interpolate import griddata
 
-input_las_dir = f"{snakemake.wildcards.BASE_PATH}/output/single_trees/"
-output_dir = f"{snakemake.wildcards.BASE_PATH}/output/single_trees_normalized_to_ground/"
+input_las_dir = snakemake.params.input_dir
+output_dir = snakemake.params.output_dir
 input_files_list = glob.glob(input_las_dir + "/*.laz")
 
 # Load stem map

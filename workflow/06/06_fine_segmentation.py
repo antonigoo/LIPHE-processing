@@ -19,10 +19,9 @@ import lbl_segment
 # other python libraries
 import glob
 
-
-input_las_dir = f"{snakemake.wildcards.BASE_PATH}/output/single_trees_normalized_to_ground/"
-output_las_dir = f"{snakemake.wildcards.BASE_PATH}/output/fine_segmentation/"
-output_noise_dir = f"{snakemake.wildcards.BASE_PATH}/output/fine_segmentation_noise/"
+input_las_dir = snakemake.params.input_dir
+output_las_dir = snakemake.params.output_dir
+output_noise_dir = snakemake.params.output_dir_noise
 input_files_list = glob.glob(input_las_dir + "/*.laz")
 
 for input_file in input_files_list:

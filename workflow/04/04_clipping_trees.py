@@ -24,7 +24,7 @@ import pandas as pd
 
 
 input_las_filename = snakemake.input[0]
-output_dir = f"{snakemake.wildcards.BASE_PATH}/output/single_trees/"
+output_dir = snakemake.params.output_dir
 
 las_content = ReadLaz.ReadLaz(input_las_filename, config["DLLPATH"])
 
@@ -67,9 +67,10 @@ for k in range(N_trees):
         extra_bytes_names,
     )
     # write the tree to file
+    basename = os.path.split(input_las_filename)[-1].rsplit(".", 1)[0].rsplit("_", 1)[0]
     output_las_filename = (
         output_dir
-        + os.path.split(input_las_filename)[-1].rsplit(".", 1)[0]
+        + basename
         + "_"
         + str(ID[k])
         + ".laz"
