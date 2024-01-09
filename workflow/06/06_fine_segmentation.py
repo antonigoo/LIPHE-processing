@@ -19,9 +19,19 @@ import lbl_segment
 # other python libraries
 import glob
 
-input_las_dir = snakemake.params.input_dir
-output_las_dir = snakemake.params.output_dir
-output_noise_dir = snakemake.params.output_dir_noise
+input_las_dir = snakemake.input[0]
+output_las_dir = snakemake.output.output_dir[0]
+output_noise_dir = snakemake.output.output_dir_noise[0]
+
+output_las_dir = os.path.join(output_las_dir, '')  # adds / at the end if it is not there
+output_noise_dir = os.path.join(output_noise_dir, '')  # adds / at the end if it is not there
+
+if not os.path.exists(output_las_dir):
+    os.makedirs(output_las_dir)
+
+if not os.path.exists(output_noise_dir):
+    os.makedirs(output_noise_dir)
+
 input_files_list = glob.glob(input_las_dir + "/*.laz")
 
 for input_file in input_files_list:

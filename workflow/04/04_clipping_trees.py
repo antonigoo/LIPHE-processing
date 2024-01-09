@@ -24,7 +24,11 @@ import pandas as pd
 
 
 input_las_filename = snakemake.input[0]
-output_dir = snakemake.params.output_dir
+output_dir = snakemake.output[0]
+output_dir = os.path.join(output_dir, '')  # adds / at the end if it is not there
+
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
 
 las_content = ReadLaz.ReadLaz(input_las_filename, config["DLLPATH"])
 

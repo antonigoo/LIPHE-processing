@@ -24,8 +24,13 @@ import pandas as pd
 import glob
 from scipy.interpolate import griddata
 
-input_las_dir = snakemake.params.input_dir
-output_dir = snakemake.params.output_dir
+input_las_dir = snakemake.input[0]
+output_dir = snakemake.output[0]
+output_dir = os.path.join(output_dir, '')  # adds / at the end if it is not there
+
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
 input_files_list = glob.glob(input_las_dir + "/*.laz")
 
 # Load stem map

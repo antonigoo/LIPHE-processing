@@ -12,4 +12,4 @@
 module -q purge
 export PATH="/projappl/project_2003180/samantha/bin:$PATH"
 
-snakemake --cores 1
+snakemake --cores 1 fine_segmentation
