@@ -9,6 +9,10 @@ rule add_parameters_and_normalize:
         expand("{base_path}/{base_name}.laz", base_path=base_path, base_name=base_name)
     output:
         expand("{base_path}/output/{base_name}_normalized.las", base_path=base_path, base_name=base_name)
+    resources:
+        runtime = 5, # minutes
+        cpus_per_task = 1,
+        mem_mb = 20000,
     script:
         "../workflow/01/01_add_parameters_and_normalize.py"
 
@@ -17,6 +21,10 @@ rule georeference:
         rules.add_parameters_and_normalize.output
     output:
         expand("{base_path}/output/{base_name}_georef.las", base_path=base_path, base_name=base_name)
+    resources:
+        runtime = 5, # minutes
+        cpus_per_task = 1,
+        mem_mb = 20000,
     script:
         "../workflow/02/02_georeference.py"
 
@@ -41,6 +49,10 @@ rule normalize_to_ground:
         rules.clipping_trees.output
     output:
         directory(expand("{base_path}/output/single_trees_normalized_to_ground", base_path=base_path))
+    resources:
+        runtime = 5, # minutes
+        cpus_per_task = 1,
+        mem_mb = 20000,
     script:
         "../workflow/05/05_normalize_to_ground.py"
 
@@ -50,5 +62,9 @@ rule fine_segmentation:
     output:
         output_dir = directory(expand("{base_path}/output/fine_segmentation", base_path=base_path)),
         output_dir_noise = directory(expand("{base_path}/output/fine_segmentation_noise", base_path=base_path))
+    resources:
+        runtime = 5, # minutes
+        cpus_per_task = 1,
+        mem_mb = 20000,
     script:
         "../workflow/06/06_fine_segmentation.py"

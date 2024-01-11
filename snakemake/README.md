@@ -12,3 +12,8 @@ In a terminal:
 module load snakemake
 snakemake -np --dag | dot -Tpng > dag.png
 ```
+
+## SLURM integraion
+```bash
+snakemake -s Snakefile_SLURM -F fine_segmentation --jobs 1 --executor slurm --default-resources slurm_account=project_2008498 slurm_partition=interactive
+```
