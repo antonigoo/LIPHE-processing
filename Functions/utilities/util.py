@@ -41,7 +41,7 @@ def write_segments(
     for pc_ind, _ in matches:
         if verbose:
             print("Writing tree segment")
-        segment_pcs[pc_ind].write(tree_path + tree_filename)
+        segment_pcs[pc_ind].write(os.path.join(tree_path, tree_filename))
 
     # Write other identified segments, if necessary
     counter = 1
@@ -58,7 +58,7 @@ def write_segments(
             if verbose:
                 sys.stdout.write('\rWriting other segment %3i out of %3i' % (counter, n_segments - has_match))
                 sys.stdout.flush()
-            segment_pcs[i].write(other_path + f"segment_{counter}.las")
+            segment_pcs[i].write(os.path.join(other_path, f"segment_{counter}.las"))
             counter += 1
         if verbose:
             print("")

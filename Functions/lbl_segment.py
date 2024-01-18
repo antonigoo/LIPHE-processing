@@ -87,7 +87,7 @@ def lbl_segment(
         print("Writing tree segments to separate .las files...")
         write_time = time.time()
     util.write_segments(
-        tree_pcs, matches, output_path_main, os.path.basename(path_to_pc), output_path_noise, write_other, verbose
+        tree_pcs, matches, os.path.dirname(output_path_main), os.path.basename(path_to_pc), output_path_noise, write_other, verbose
     )
     if verbose:
         print(f"Finish in {(time.time() - write_time):.3f} s")
