@@ -1,14 +1,34 @@
+import os
 
-configfile: "config.json"
+def find_laz_files(path):
+    laz_files = []
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            if file.endswith(".laz"):
+                laz_files.append(file.rstrip(".laz"))
+    return laz_files
 
-base_path = config["BASE_PATH"]
-base_name = config["BASE_NAME"]
+def generate_target_files(base_path, files):
+    target_files = []
+    for file in files:
+        filename = file + ".out"
+        target = os.path.join(base_path, "output", file, filename)
+        target_files.append(target)
+    return target_files
+
+base_path = os.environ.get("BASE_PATH")
+laz_files = find_laz_files(base_path)
+target_files = generate_target_files(base_path, laz_files)
+
+rule all:
+    input:
+        expand("{target}", target=target_files)
 
 rule add_parameters_and_normalize:
     input:
-        expand("{base_path}/{base_name}.laz", base_path=base_path, base_name=base_name)
+        expand("{base_path}/{{base_name}}.laz", base_path=base_path)
     output:
-        expand("{base_path}/output/{base_name}_normalized.las", base_path=base_path, base_name=base_name)
+        expand("{base_path}/output/{{base_name}}_normalized.las", base_path=base_path)
     resources:
         runtime = 5, # minutes
         cpus_per_task = 1,
@@ -20,7 +40,7 @@ rule georeference:
     input:
         rules.add_parameters_and_normalize.output
     output:
-        expand("{base_path}/output/{base_name}_georef.las", base_path=base_path, base_name=base_name)
+        expand("{base_path}/output/{{base_name}}_georef.las", base_path=base_path)
     resources:
         runtime = 5, # minutes
         cpus_per_task = 1,
@@ -32,7 +52,11 @@ rule spatial_resample:
     input:
         rules.georeference.output
     output:
-        expand("{base_path}/output/{base_name}_resampled.las", base_path=base_path, base_name=base_name)
+        expand("{base_path}/output/{{base_name}}_resampled.las", base_path=base_path)
+    resources:
+        runtime = 5, # minutes
+        cpus_per_task = 1,
+        mem_mb = 20000,
     script:
         "../workflow/03/03_spatial_resample.py"
 
@@ -40,7 +64,11 @@ rule clipping_trees:
     input:
         rules.georeference.output
     output:
-        directory(expand("{base_path}/output/single_trees/", base_path=base_path))
+        directory(expand("{base_path}/output/{{base_name}}/single_trees/", base_path=base_path))
+    resources:
+        runtime = 5, # minutes
+        cpus_per_task = 1,
+        mem_mb = 20000,
     script:
         "../workflow/04/04_clipping_trees.py"
 
@@ -48,7 +76,7 @@ rule normalize_to_ground:
     input:
         rules.clipping_trees.output
     output:
-        directory(expand("{base_path}/output/single_trees_normalized_to_ground", base_path=base_path))
+        directory(expand("{base_path}/output/{{base_name}}/single_trees_normalized_to_ground", base_path=base_path))
     resources:
         runtime = 5, # minutes
         cpus_per_task = 1,
@@ -60,11 +88,23 @@ rule fine_segmentation:
     input:
         rules.normalize_to_ground.output
     output:
-        output_dir = directory(expand("{base_path}/output/fine_segmentation", base_path=base_path)),
-        output_dir_noise = directory(expand("{base_path}/output/fine_segmentation_noise", base_path=base_path))
+        output_dir = directory(expand("{base_path}/output/{{base_name}}/fine_segmentation", base_path=base_path)),
+        output_dir_noise = directory(expand("{base_path}/output/{{base_name}}/fine_segmentation_noise", base_path=base_path))
     resources:
-        runtime = 5, # minutes
+        runtime = 10, # minutes
         cpus_per_task = 1,
         mem_mb = 20000,
     script:
         "../workflow/06/06_fine_segmentation.py"
+
+rule final:
+    input:
+        rules.fine_segmentation.output
+    output:
+        expand("{base_path}/output/{{base_name}}/{{base_name}}.out", base_path=base_path)
+    resources:
+        runtime = 1, # minutes
+        cpus_per_task = 1,
+        mem_mb = 2000,
+    shell:
+        "echo \"OK\" > {output}"
