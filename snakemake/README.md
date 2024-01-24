@@ -17,7 +17,7 @@ BASE_PATH="/scratch/project_2008498/antongoo/fgi/snakemake_many_files" snakemake
 
 ## SLURM integraion
 ```bash
-BASE_PATH="/scratch/project_2008498/antongoo/fgi/snakemake_many_files" snakemake -s Snakefile_SLURM --jobs 1 --executor slurm --default-resources slurm_account=project_2008498 slurm_partition=interactive
+BASE_PATH="/scratch/project_2008498/antongoo/fgi/snakemake_many_files" snakemake --keep-going -s Snakefile_SLURM -F --jobs 1 --executor slurm --default-resources slurm_account=project_2008498 slurm_partition=small
 ```
 
 ## Hyperqueue integration
@@ -33,5 +33,5 @@ srun --overlap --cpu-bind=none --mpi=none hq worker start \
     --on-server-lost finish-running \
     --cpus="$SLURM_CPUS_PER_TASK" & hq worker wait 1
 
-BASE_PATH="/scratch/project_2008498/antongoo/fgi/snakemake_many_files" snakemake -s Snakefile_SLURM --jobs 1 --executor cluster-generic --cluster-generic-submit-cmd "hq submit --cpus 1"
+BASE_PATH="/scratch/project_2008498/antongoo/fgi/snakemake_many_files" snakemake --keep-going -s Snakefile_SLURM --jobs 1 --executor cluster-generic --cluster-generic-submit-cmd "hq submit --cpus 1"
 ```

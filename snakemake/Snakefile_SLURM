@@ -1,11 +1,7 @@
 import os
 
 def find_laz_files(path):
-    laz_files = []
-    for root, dirs, files in os.walk(path):
-        for file in files:
-            if file.endswith(".laz"):
-                laz_files.append(file.rstrip(".laz"))
+    laz_files = [file.rsplit(".laz")[0] for file in os.listdir(path) if file.endswith(".laz")]
     return laz_files
 
 def generate_target_files(base_path, files):
@@ -99,12 +95,9 @@ rule fine_segmentation:
 
 rule final:
     input:
-        rules.fine_segmentation.output
-    output:
-        expand("{base_path}/output/{{base_name}}/{{base_name}}.out", base_path=base_path)
+        expand("{base_path}/output/{base_name}/fine_segmentation", base_path=base_path, base_name=laz_files)
+    default_target: True
     resources:
         runtime = 1, # minutes
         cpus_per_task = 1,
         mem_mb = 2000,
-    shell:
-        "echo \"OK\" > {output}"
