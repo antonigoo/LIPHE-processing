@@ -4,17 +4,8 @@ def find_laz_files(path):
     laz_files = [file.rsplit(".laz")[0] for file in os.listdir(path) if file.endswith(".laz")]
     return laz_files
 
-def generate_target_files(base_path, files):
-    target_files = []
-    for file in files:
-        filename = file + ".out"
-        target = os.path.join(base_path, "output", file, filename)
-        target_files.append(target)
-    return target_files
-
-base_path = os.environ.get("BASE_PATH")
+base_path = config["BASE_PATH"]
 laz_files = find_laz_files(base_path)
-target_files = generate_target_files(base_path, laz_files)
 
 
 rule add_parameters_and_normalize:

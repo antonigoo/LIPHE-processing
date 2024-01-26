@@ -12,12 +12,12 @@ sbatch batchjob.sh
 In a terminal:
 ```bash
 module load snakemake
-BASE_PATH="/scratch/project_2008498/antongoo/fgi/snakemake_many_files" snakemake -np  --dag | dot -Tpng > dag.png
+snakemake -np --config BASE_PATH="/scratch/project_2008498/antongoo/fgi/snakemake_many_files"  --dag | dot -Tpng > dag.png
 ```
 
 ## SLURM integraion
 ```bash
-BASE_PATH="/scratch/project_2008498/antongoo/fgi/snakemake_many_files" snakemake --keep-going -s Snakefile_SLURM -F --jobs 1 --executor slurm --default-resources slurm_account=project_2008498 slurm_partition=small
+snakemake --keep-going -s Snakefile_SLURM -F --jobs 4 --executor slurm --default-resources slurm_account=project_2008498 slurm_partition=small --config BASE_PATH="/scratch/project_2008498/antongoo/fgi/snakemake_many_files"
 ```
 
 ## Hyperqueue integration
@@ -33,5 +33,5 @@ srun --overlap --cpu-bind=none --mpi=none hq worker start \
     --on-server-lost finish-running \
     --cpus="$SLURM_CPUS_PER_TASK" & hq worker wait 1
 
-BASE_PATH="/scratch/project_2008498/antongoo/fgi/snakemake_many_files" snakemake --keep-going -s Snakefile_SLURM --jobs 1 --executor cluster-generic --cluster-generic-submit-cmd "hq submit --cpus 1"
+snakemake --keep-going -s Snakefile_SLURM --jobs 4 --executor cluster-generic --cluster-generic-submit-cmd "hq submit --cpus 1" --config BASE_PATH="/scratch/project_2008498/antongoo/fgi/snakemake_many_files"
 ```
