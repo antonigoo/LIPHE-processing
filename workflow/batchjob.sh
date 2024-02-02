@@ -7,7 +7,7 @@
 #SBATCH --partition=small
 
 module purge
-export PATH="/projappl/project_2003180/samantha/bin:$PATH"
 module load nextflow
+export PATH="/projappl/project_2003180/samantha/bin:$PATH"
 
-nextflow run workflow.nf --in <value>
+nextflow run workflow.nf --base_path <value>
