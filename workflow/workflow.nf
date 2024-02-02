@@ -13,18 +13,18 @@ process addParametersAndNormalize {
 
     script:
     """
-    $projectDir/01/01_add_parameters_and_normalize.py ${params.base_path + '/' + point_cloud.name} ${point_cloud.baseName}_normalized.las
+    $projectDir/01/01_add_parameters_and_normalize.py $point_cloud ${point_cloud.baseName}_normalized.las
     """
 }
 
 process georeference {
-    publishDir "$params.base_path/output/${base_name}", mode: 'copy', overwrite: false
+    publishDir "$params.base_path/output/$base_name", mode: 'copy', overwrite: false
 
     input:
     tuple path(point_cloud), val(base_name)
 
     output:
-    tuple path("${base_name}_georeference.las"), val("$base_name")
+    tuple path("${base_name}_georeference.las"), val(base_name)
 
     script:
     """
@@ -33,13 +33,13 @@ process georeference {
 }
 
 process spatialResample {
-    publishDir "$params.base_path/output/${base_name}", mode: 'copy', overwrite: false
+    publishDir "$params.base_path/output/$base_name", mode: 'copy', overwrite: false
 
     input:
     tuple path(point_cloud), val(base_name)
 
     output:
-    tuple path("${base_name}_resampled.las"), val("$base_name")
+    tuple path("${base_name}_resampled.las"), val(base_name)
 
     script:
     """
@@ -48,13 +48,13 @@ process spatialResample {
 }
 
 process clippingTrees {
-    publishDir "$params.base_path/output/${base_name}", mode: 'copy', overwrite: false
+    publishDir "$params.base_path/output/$base_name", mode: 'copy', overwrite: false
 
     input:
     tuple path(point_cloud), val(base_name)
 
     output:
-    tuple path("single_trees/${base_name}*.laz"), val("$base_name")
+    tuple path("single_trees/${base_name}*.laz"), val(base_name)
 
     script:
     """
@@ -64,23 +64,23 @@ process clippingTrees {
 }
 
 process normalizeToGround {
-    publishDir "$params.base_path/output/${base_name}", mode: 'copy', overwrite: false
+    publishDir "$params.base_path/output/$base_name", mode: 'copy', overwrite: false
 
     input:
     tuple path(point_clouds), val(base_name)
 
     output:
-    tuple path("single_trees_normalized_to_ground/${base_name}*.laz"), val("$base_name")
+    tuple path("single_trees_normalized_to_ground/${base_name}*.laz"), val(base_name)
 
     script:
     """
     mkdir -p single_trees_normalized_to_ground
-    $projectDir/05/05_normalize_to_ground.py ${params.base_path + '/output/' + base_name + '/single_trees'} ./single_trees_normalized_to_ground/
+    $projectDir/05/05_normalize_to_ground.py ./ ./single_trees_normalized_to_ground/
     """
 }
 
 process fineSegmentation {
-    publishDir "$params.base_path/output/${base_name}", mode: 'copy', overwrite: false
+    publishDir "$params.base_path/output/$base_name", mode: 'copy', overwrite: false
 
     input:
     tuple path(point_clouds), val(base_name)
@@ -92,7 +92,7 @@ process fineSegmentation {
     """
     mkdir -p fine_segmentation
     mkdir -p fine_segmentation_noise
-    $projectDir/06/06_fine_segmentation.py ${params.base_path + '/output/' + base_name + '/single_trees_normalized_to_ground'} ./fine_segmentation/ ./fine_segmentation_noise/
+    $projectDir/06/06_fine_segmentation.py ./ ./fine_segmentation/ ./fine_segmentation_noise/
     """
 }
 

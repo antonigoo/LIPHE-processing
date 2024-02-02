@@ -30,7 +30,7 @@ from pathlib import Path
 
 input_las_dir = sys.argv[1]
 output_dir = sys.argv[2]
-input_files_list = glob.glob(input_las_dir + "/*.laz")
+input_files_list = glob.glob(input_las_dir + "*.laz")
 
 # Load stem map
 df = pd.read_excel(config["tree_map"])

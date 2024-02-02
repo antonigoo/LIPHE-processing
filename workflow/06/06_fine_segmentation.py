@@ -26,7 +26,7 @@ import glob
 input_las_dir = sys.argv[1]
 output_las_dir = sys.argv[2]
 output_noise_dir = sys.argv[3]
-input_files_list = glob.glob(input_las_dir + "/*.laz")
+input_files_list = glob.glob(input_las_dir + "*.laz")
 
 for input_file in input_files_list:
     # I guess tree_id == the number at the end of the filename of single tree las
