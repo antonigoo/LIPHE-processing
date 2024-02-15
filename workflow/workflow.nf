@@ -1,8 +1,10 @@
 #!/usr/bin/env nextflow
 
 params.base_path = "/scratch/project_2008498/antongoo/fgi/nextflow"
+params.jobs = 1
+maxForks = params.jobs
 
-process addParametersAndNormalize {
+process addParametersAndNormalize {    
     publishDir "$params.base_path/output/$point_cloud.baseName", mode: 'copy', overwrite: false
 
     input:
@@ -64,6 +66,8 @@ process clippingTrees {
 }
 
 process normalizeToGround {
+    memory "30GB"
+
     publishDir "$params.base_path/output/$base_name", mode: 'copy', overwrite: false
 
     input:
@@ -80,6 +84,9 @@ process normalizeToGround {
 }
 
 process fineSegmentation {
+    time "10m"
+    memory "40GB"
+
     publishDir "$params.base_path/output/$base_name", mode: 'copy', overwrite: false
 
     input:
