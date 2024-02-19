@@ -29,7 +29,7 @@ nextflow run workflow.nf -c slurm.config --base_path "/scratch/project_2008498/a
 ```
 
 ## Hyperqueue integration
-From version 22.05.0-edge: Hyperqueue integration is built-in into Nextflow. We can use `executor = "hyperqueue"`. 
+From version 22.05.0-edge: Hyperqueue integration is built-in into Nextflow. We can use `executor = "hyperqueue"`. Not that for older versions, instead of `executor = "hyperqueue"` we have to use `executor = "hq"`.
 Set up and commands are taken from: https://docs.csc.fi/apps/hyperqueue/. Another configuration available here: https://docs.csc.fi/support/tutorials/nextflow-hq/.
 ```bash
 module load nextflow
