@@ -1,8 +1,6 @@
 #!/usr/bin/env nextflow
 
 params.base_path = "/scratch/project_2008498/antongoo/fgi/nextflow"
-params.jobs = 1
-maxForks = params.jobs
 
 process addParametersAndNormalize {    
     publishDir "$params.base_path/output/$point_cloud.baseName", mode: 'copy', overwrite: false

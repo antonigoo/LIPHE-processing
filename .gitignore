@@ -7,3 +7,5 @@ __pycache__/
 .nextflow
 work/
 .nextflow.log*
+*/hq-server/*
+hq-server/*
