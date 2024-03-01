@@ -7,3 +7,4 @@ __pycache__/
 .nextflow
 work/
 .nextflow.log*
+wdl-out*/
