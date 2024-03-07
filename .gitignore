@@ -7,3 +7,6 @@ __pycache__/
 .nextflow
 work/
 .nextflow.log*
+cromwell-executions
+cromwell-workflow-logs
+*.jar
