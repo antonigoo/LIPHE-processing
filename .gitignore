@@ -8,3 +8,5 @@ __pycache__/
 work/
 .nextflow.log*
 wdl-out*/
+cromwell-executions
+cromwell-workflow-logs

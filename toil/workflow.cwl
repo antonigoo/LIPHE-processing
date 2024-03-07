@@ -8,10 +8,7 @@ inputs:
   output_las:
     type: File
 
-outputs:
-  out:
-    type: string
-    outputSource: 01_normalize/normalized_las
+outputs: []
 
 steps:
   01_normalize:
@@ -19,4 +16,4 @@ steps:
     in:
       input_las: input_las
       output_las: output_las
-    out: [normalized_las]
+    out: []
