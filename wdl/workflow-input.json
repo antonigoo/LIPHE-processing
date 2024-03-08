@@ -1,4 +1,4 @@
 {
-    "myWorkflow.to_print": "hehe.txt",
-    "myWorkflow.to_save": "hehe2.txt"
+    "LipheWorkflow.input_las": "/scratch/project_2008498/antongoo/fgi/toil/200406_100502_Sample_resample005_.laz",
+    "LipheWorkflow.cloud_name": "200406_100502_Sample_resample005_"
 }

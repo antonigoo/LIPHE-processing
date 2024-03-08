@@ -2,28 +2,28 @@
 # Declare WDL version 1.0 if working in Terra
 version 1.0
 
-workflow myWorkflow {
+workflow LipheWorkflow {
     input {
-        File to_print
-        String to_save
+        File input_las
+        String cloud_name
     }
 
-    call myTask {
-        input: s = to_print, o = to_save
+    call add_parameters_and_normalize {
+        input: input_las = input_las, cloud_name = cloud_name
     }
 }
 
-task myTask {
+task add_parameters_and_normalize {
     input {
-        File s
-        String o
+        File input_las
+        String cloud_name
     }
 
     command <<<
-        cat ~{s} >> ~{o}
+        python /projappl/project_2008498/code/workflow/01/01_add_parameters_and_normalize.py ~{input_las} ~{cloud_name}_normalized.laz
     >>>
 
     output {
-        File out = o
+        File normalized_las = "${cloud_name}_normalized.laz"
     }
 }
