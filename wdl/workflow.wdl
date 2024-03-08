@@ -5,8 +5,8 @@ version 1.0
 workflow LipheWorkflow {
     input {
         File input_las
-        String cloud_name
     }
+    String cloud_name = basename(input_las, ".laz")
 
     call add_parameters_and_normalize { input: input_las = input_las, cloud_name = cloud_name }
     call georeference { input: input_las = add_parameters_and_normalize.normalized_las, cloud_name = cloud_name }
