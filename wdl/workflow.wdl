@@ -20,11 +20,12 @@ task add_parameters_and_normalize {
     }
 
     command <<<
-        python /projappl/project_2008498/code/workflow/01/01_add_parameters_and_normalize.py ~{input_las} ~{cloud_name}_normalized.las
+        mkdir -p  ~{cloud_name}
+        python /projappl/project_2008498/code/workflow/01/01_add_parameters_and_normalize.py ~{input_las} ~{cloud_name}/~{cloud_name}_normalized.las
     >>>
 
     output {
-        File normalized_las = "${cloud_name}_normalized.las"
+        File normalized_las = "${cloud_name}/${cloud_name}_normalized.las"
     }
 }
 
@@ -35,11 +36,12 @@ task georeference {
     }
 
     command <<<
-        python /projappl/project_2008498/code/workflow/02/02_georeference.py ~{input_las} ~{cloud_name}_georeference.las
+        mkdir -p  ~{cloud_name}
+        python /projappl/project_2008498/code/workflow/02/02_georeference.py ~{input_las} ~{cloud_name}/~{cloud_name}_georeference.las
     >>>
 
     output {
-        File georeference_las = "${cloud_name}_georeference.las"
+        File georeference_las = "${cloud_name}/${cloud_name}_georeference.las"
     }
 }
 
@@ -50,10 +52,11 @@ task spatial_resample {
     }
 
     command <<<
-        python /projappl/project_2008498/code/workflow/03/03_spatial_resample.py ~{input_las} ~{cloud_name}_resampled.las
+        mkdir -p  ~{cloud_name}
+        python /projappl/project_2008498/code/workflow/03/03_spatial_resample.py ~{input_las} ~{cloud_name}/~{cloud_name}_resampled.las
     >>>
 
     output {
-        File resampled_las = "${cloud_name}_resampled.las"
+        File resampled_las = "${cloud_name}/${cloud_name}_resampled.las"
     }
 }
