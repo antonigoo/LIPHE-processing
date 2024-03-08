@@ -1,16 +1,32 @@
-# Example workflow
-# Declare WDL version 1.0 if working in Terra
 version 1.0
 
 workflow LipheWorkflow {
     input {
-        File input_las
+        String input_directory
     }
-    String cloud_name = basename(input_las, ".laz")
+    
+    call find_laz_files { input: input_directory = input_directory }
+    scatter (input_las in find_laz_files.laz_files) {
+        String cloud_name = basename(input_las, ".laz")
 
-    call add_parameters_and_normalize { input: input_las = input_las, cloud_name = cloud_name }
-    call georeference { input: input_las = add_parameters_and_normalize.normalized_las, cloud_name = cloud_name }
-    call spatial_resample { input: input_las = georeference.georeference_las, cloud_name = cloud_name }
+        call add_parameters_and_normalize { input: input_las = input_las, cloud_name = cloud_name }
+        call georeference { input: input_las = add_parameters_and_normalize.normalized_las, cloud_name = cloud_name }
+        call spatial_resample { input: input_las = georeference.georeference_las, cloud_name = cloud_name }
+    }
+}
+
+task find_laz_files {
+    input {
+        String input_directory
+    }
+
+    command <<<
+        find ~{input_directory} -type f -name "*.laz"
+    >>>
+
+    output {
+        Array[String] laz_files = read_lines(stdout())
+    }
 }
 
 task add_parameters_and_normalize {
