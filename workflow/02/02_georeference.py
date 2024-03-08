@@ -4,8 +4,8 @@ import os
 # load user configurations from external file
 import yaml
 
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
-with open("user_config.yml", "r") as f:
+script_dir = os.path.dirname(os.path.abspath(__file__))
+with open(os.path.join(script_dir, "user_config.yml"), "r") as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
 
 # add functions to path
@@ -40,13 +40,13 @@ local_reference_points = []
 global_reference_points = []
 
 # Declare point in the cloud in the local reference system, X, Y, Z
-with open("reference_points_local.csv") as inputfile:
+with open(os.path.join(script_dir, "reference_points_local.csv"), "r") as inputfile:
     for row in csv.reader(inputfile, quoting=csv.QUOTE_NONNUMERIC):
         print(row)
         local_reference_points.extend(row)
 
 # Declare the same points in the georef. reference system >> ETRS89-TM35FIN reference system, E, N, H
-with open("reference_points_global.csv") as inputfile:
+with open(os.path.join(script_dir, "reference_points_global.csv"), "r") as inputfile:
     for row in csv.reader(inputfile, quoting=csv.QUOTE_NONNUMERIC):
         print(row)
         global_reference_points.extend(row)
