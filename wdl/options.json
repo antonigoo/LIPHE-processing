@@ -1,5 +1,5 @@
 {
     "workflow_failure_mode": "ContinueWhilePossible",
-    "final_workflow_outputs_dir": "/scratch/project_2008498/antongoo/fgi/wdl_many_files/output",
+    "final_workflow_outputs_dir": "/scratch/project_2008498/antongoo/fgi/wdl/output",
     "use_relative_output_paths": true
 }
