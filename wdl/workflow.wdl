@@ -11,9 +11,10 @@ workflow LipheWorkflow {
 
         call add_parameters_and_normalize { input: input_las = input_las, cloud_name = cloud_name }
         call georeference { input: input_las = add_parameters_and_normalize.out, cloud_name = cloud_name }
-        # call spatial_resample { input: input_las = georeference.out, cloud_name = cloud_name }
-        call clipping_trees { input: input_las = georeference.out, cloud_name = cloud_name }
+        call spatial_resample { input: input_las = georeference.out, cloud_name = cloud_name }
+        call clipping_trees { input: input_las = spatial_resample.out, cloud_name = cloud_name }
         call normalize_to_ground { input: input_dir = clipping_trees.out, cloud_name = cloud_name }
+        call fine_segmentation { input: input_dir = normalize_to_ground.out, cloud_name = cloud_name }
     }
 }
 
@@ -110,5 +111,23 @@ task normalize_to_ground {
 
     output {
         File out = "${cloud_name}/single_trees_normalized_to_ground/"
+    }
+}
+
+task fine_segmentation {
+    input {
+        File input_dir
+        String cloud_name
+    }
+
+    command <<<
+        mkdir -p ~{cloud_name}/fine_segmentation
+        mkdir -p ~{cloud_name}/fine_segmentation_noise
+        python /projappl/project_2008498/code/workflow/06/06_fine_segmentation.py ~{input_dir} ~{cloud_name}/fine_segmentation/ ~{cloud_name}/fine_segmentation_noise/
+    >>>
+
+    output {
+        File out = "${cloud_name}/fine_segmentation/"
+        File out_noise = "${cloud_name}/fine_segmentation_noise/"
     }
 }
