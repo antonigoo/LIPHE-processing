@@ -13,7 +13,7 @@ workflow LipheWorkflow {
         call georeference { input: input_las = add_parameters_and_normalize.out, cloud_name = cloud_name }
         # call spatial_resample { input: input_las = georeference.out, cloud_name = cloud_name }
         call clipping_trees { input: input_las = georeference.out, cloud_name = cloud_name }
-        call normalize_to_ground { input: input_las_files = clipping_trees.out, cloud_name = cloud_name }
+        call normalize_to_ground { input: input_dir = clipping_trees.out, cloud_name = cloud_name }
     }
 }
 
@@ -88,28 +88,27 @@ task clipping_trees {
     command <<<
         mkdir -p ~{cloud_name}/single_trees
         python /projappl/project_2008498/code/workflow/04/04_clipping_trees.py ~{input_las} ~{cloud_name}/single_trees/
-        find ~{cloud_name}/single_trees -maxdepth 1 -type f -name "*.laz" > result.txt
     >>>
 
     output {
         # glob does work, but it puts the files into some weird directory, which is then copied to the scratch
-        Array[File] out = read_lines("result.txt")
+        # I just use directory as File type
+        File out = "${cloud_name}/single_trees/"
     }
 }
 
 task normalize_to_ground {
     input {
-        Array[File] input_las_files
+        File input_dir
         String cloud_name
     }
 
     command <<<
         mkdir -p ~{cloud_name}/single_trees_normalized_to_ground
-        python /projappl/project_2008498/code/workflow/05/05_normalize_to_ground.py ./ ~{cloud_name}/single_trees_normalized_to_ground/
-        find ~{cloud_name}/single_trees_normalized_to_ground -maxdepth 1 -type f -name "*.laz" > result.txt
+        python /projappl/project_2008498/code/workflow/05/05_normalize_to_ground.py ~{input_dir} ~{cloud_name}/single_trees_normalized_to_ground/
     >>>
 
     output {
-        Array[File] out = read_lines("result.txt")
+        File out = "${cloud_name}/single_trees_normalized_to_ground/"
     }
 }
