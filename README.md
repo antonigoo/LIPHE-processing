@@ -14,3 +14,11 @@ cd wdl
 java -DLOG_LEVEL=INFO  -jar cromwell-86.jar run workflow.wdl --inputs workflow-input.json --options options.json
 ```
 
+### SLURM
+```bash
+module load biojava/11
+export PATH="/projappl/project_2003180/samantha/bin:$PATH"
+cd wdl
+java -DLOG_LEVEL=INFO -Dconfig.file=slurmconf.conf  -jar cromwell-86.jar run workflow-slurm.wdl --inputs workflow-input.json --options options.json
+```
+
