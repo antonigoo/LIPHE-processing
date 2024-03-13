@@ -1,3 +1,4 @@
 {
-    "LipheWorkflow.input_directory": "/scratch/project_2008498/antongoo/fgi/wdl_many_files"
+    "LipheWorkflow.input_directory": "/scratch/project_2008498/antongoo/fgi/wdl_many_files",
+    "LipheWorkflow.script_directory": "/projappl/project_2008498/code/workflow"
 }
