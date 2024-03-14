@@ -10,3 +10,4 @@ work/
 cromwell-executions
 cromwell-workflow-logs
 *.jar
+hq-server
