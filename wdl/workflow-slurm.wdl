@@ -141,7 +141,7 @@ task fine_segmentation {
 
     runtime { 
         mem_per_cpu: "40GB"
-        time: "00:05:00"
+        time: "00:10:00"
     }
 
     command <<<
