@@ -11,7 +11,7 @@ wget https://github.com/broadinstitute/cromwell/releases/download/86/cromwell-86
 module load biojava/11
 export PATH="/projappl/project_2003180/samantha/bin:$PATH"
 cd wdl
-java -DLOG_LEVEL=INFO  -jar cromwell-86.jar run workflow.wdl --inputs workflow-input.json --options options.json
+java -DLOG_LEVEL=INFO  -Dconfig.file=basicconf.conf -jar cromwell-86.jar run workflow.wdl --inputs workflow-input.json --options options.json
 ```
 
 ### SLURM
