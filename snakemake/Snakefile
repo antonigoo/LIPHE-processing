@@ -12,7 +12,7 @@ rule add_parameters_and_normalize:
     input:
         expand("{base_path}/{{base_name}}.laz", base_path=base_path)
     output:
-        expand("{base_path}/output/{{base_name}}_normalized.las", base_path=base_path)
+        expand("{base_path}/output/{{base_name}}/{{base_name}}_normalized.las", base_path=base_path)
     script:
         "../workflow/01/01_add_parameters_and_normalize.py"
 
@@ -20,7 +20,7 @@ rule georeference:
     input:
         rules.add_parameters_and_normalize.output
     output:
-        expand("{base_path}/output/{{base_name}}_georef.las", base_path=base_path)
+        expand("{base_path}/output/{{base_name}}/{{base_name}}_georef.las", base_path=base_path)
     script:
         "../workflow/02/02_georeference.py"
 

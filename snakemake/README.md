@@ -18,7 +18,7 @@ snakemake -np --config BASE_PATH="/scratch/project_2008498/antongoo/fgi/snakemak
 ## Create a report
 ```bash
 module load snakemake
-export PATH="/projappl/project_2003180/samantha/bin:$PATH"export PATH="/projappl/project_2003180/samantha/bin:$PATH"
+export PATH="/projappl/project_2003180/samantha/bin:$PATH"
 snakemake --report report.html --config BASE_PATH="/scratch/project_2008498/antongoo/fgi/snakemake_many_files"
 ```
 
