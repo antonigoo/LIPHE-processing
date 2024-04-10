@@ -15,6 +15,13 @@ module load snakemake
 snakemake -np --config BASE_PATH="/scratch/project_2008498/antongoo/fgi/snakemake_many_files"  --dag | dot -Tpng > dag.png
 ```
 
+## Create a report
+```bash
+module load snakemake
+export PATH="/projappl/project_2003180/samantha/bin:$PATH"export PATH="/projappl/project_2003180/samantha/bin:$PATH"
+snakemake --report report.html --config BASE_PATH="/scratch/project_2008498/antongoo/fgi/snakemake_many_files"
+```
+
 ## SLURM integraion
 ```bash
 snakemake --keep-going -s Snakefile_SLURM -F --jobs 4 --executor slurm --default-resources slurm_account=project_2008498 slurm_partition=small --config BASE_PATH="/scratch/project_2008498/antongoo/fgi/snakemake_many_files"
