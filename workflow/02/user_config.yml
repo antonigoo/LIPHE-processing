@@ -4,7 +4,7 @@
 function_path: /projappl/project_2008498/code/
 
 # Set path to laz2Np dll (Laspy can also be used here)
-DLLPATH: /projappl/project_2003180/samantha/treedb/src/LAZ2NP/OS_LINUX/Las2Array_StaticLibrary.so
+DLLPATH: /projappl/project_2008498/code/LAZ2NP/Las2Array_StaticLibrary.so
 
 # Stem map
 tree_map: /u/58/wittkes3/unix/git/treedb/data/STEM_MAP/TreeMap.xlsx
