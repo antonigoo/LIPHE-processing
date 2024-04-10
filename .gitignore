@@ -4,3 +4,8 @@ __pycache__/
 *.out
 *.err
 .snakemake/
+.nextflow
+work/
+.nextflow.log*
+*/hq-server/*
+hq-server/*
