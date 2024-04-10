@@ -12,5 +12,5 @@
 module -q purge
 export PATH="/projappl/project_2003180/samantha/bin:$PATH"
 
-snakemake --cores 1 --keep-going --config BASE_PATH="/scratch/project_2008498/antongoo/fgi/snakemake_many_files"
+snakemake --cores 3 --keep-going --config BASE_PATH="/scratch/project_2008498/antongoo/fgi/snakemake_many_files"
 # snakemake -s Snakefile_SLURM --keep-going  --jobs 4 --executor slurm --default-resources slurm_account=project_2008498 slurm_partition=small  --config BASE_PATH="/scratch/project_2008498/antongoo/fgi/snakemake_many_files"
