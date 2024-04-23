@@ -12,8 +12,8 @@ workflow LipheWorkflow {
 
         call add_parameters_and_normalize { input: input_las = input_las, cloud_name = cloud_name, script_path = script_directory }
         call georeference { input: input_las = add_parameters_and_normalize.out, cloud_name = cloud_name, script_path = script_directory }
-        call spatial_resample { input: input_las = georeference.out, cloud_name = cloud_name, script_path = script_directory }
-        call clipping_trees { input: input_las = spatial_resample.out, cloud_name = cloud_name, script_path = script_directory }
+        # call spatial_resample { input: input_las = georeference.out, cloud_name = cloud_name, script_path = script_directory }
+        call clipping_trees { input: input_las = georeference.out, cloud_name = cloud_name, script_path = script_directory }
         call normalize_to_ground { input: input_dir = clipping_trees.out, cloud_name = cloud_name, script_path = script_directory }
         call fine_segmentation { input: input_dir = normalize_to_ground.out, cloud_name = cloud_name, script_path = script_directory }
     }
