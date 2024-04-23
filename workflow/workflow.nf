@@ -105,7 +105,7 @@ workflow {
     Channel.fromPath("$params.base_path/*.laz")
      | addParametersAndNormalize 
      | georeference 
-     | spatialResample
+    //  | spatialResample
      | clippingTrees
      | normalizeToGround
      | fineSegmentation

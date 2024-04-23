@@ -9,3 +9,4 @@ work/
 .nextflow.log*
 */hq-server/*
 hq-server/*
+*.jar
