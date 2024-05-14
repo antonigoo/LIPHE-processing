@@ -34,7 +34,7 @@ rule spatial_resample:
 
 rule clipping_trees:
     input:
-        rules.georeference.output
+        rules.spatial_resample.output
     output:
         directory(expand("{base_path}/output/{{base_name}}/single_trees/", base_path=base_path))
     script:
