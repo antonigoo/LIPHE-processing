@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH --job-name=full_workflow
 #SBATCH --account=project_2008498
-#SBATCH --time=00:55:00
+#SBATCH --time=00:20:00
 #SBATCH --cpus-per-task=1
-#SBATCH --mem-per-cpu=100GB
+#SBATCH --mem-per-cpu=30GB
 #SBATCH --partition=small
 #SBATCH --output=slurm-%j.out
 #SBATCH --error=slurm-%j.err
