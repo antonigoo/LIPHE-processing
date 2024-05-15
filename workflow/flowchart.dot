@@ -1,0 +1,30 @@
+digraph "flowchart" {
+v0 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.fromPath"];
+v1 [label="addParametersAndNormalize"];
+v0 -> v1;
+
+v1 [label="addParametersAndNormalize"];
+v2 [label="georeference"];
+v1 -> v2;
+
+v2 [label="georeference"];
+v3 [label="spatialResample"];
+v2 -> v3;
+
+v3 [label="spatialResample"];
+v4 [label="clippingTrees"];
+v3 -> v4;
+
+v4 [label="clippingTrees"];
+v5 [label="normalizeToGround"];
+v4 -> v5;
+
+v5 [label="normalizeToGround"];
+v6 [label="fineSegmentation"];
+v5 -> v6;
+
+v6 [label="fineSegmentation"];
+v7 [shape=point];
+v6 -> v7;
+
+}

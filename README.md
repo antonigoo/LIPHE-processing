@@ -11,10 +11,15 @@ cd workflow
 module purge
 module load nextflow
 export PATH="/projappl/project_2003180/samantha/bin:$PATH"
-nextflow run workflow.nf --base_path "/scratch/project_2008498/antongoo/fgi/nextflow"
+nextflow run workflow.nf --base_path "/scratch/project_2008498/antongoo/fgi/nextflow_many_files"
 ```
 
-## Run the entire workflow in a batch file (not recommended)
+## Reports
+```bash
+nextflow run workflow.nf --base_path "/scratch/project_2008498/antongoo/fgi/nextflow_many_files" -with-dag flowchart.png
+```
+
+## Run the entire workflow in a batch file
 See `workflow/batchjob.sh` for details.
 ```bash
 sbatch batchjob.sh
