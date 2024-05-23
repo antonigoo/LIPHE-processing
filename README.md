@@ -14,6 +14,14 @@ cd wdl
 java -DLOG_LEVEL=INFO -jar cromwell-86.jar run workflow.wdl --inputs workflow-input.json --options options.json
 ```
 
+### DAG creation
+```bash
+module load biojava/11
+wget https://github.com/broadinstitute/cromwell/releases/download/86/womtool-86.jar
+cd wdl
+java -jar womtool-86.jar graph workflow.wdl
+```
+
 ### SLURM
 You can modify the runtime parameters in `workflow-slurm.wdl`. If they are not specified, then the default (if exists) from `slurmconf.conf` will be used. In general, cromwell does not have any special slurm features built-in. As you can see in `slurmconf.conf`, we have to specify everything ourself (although this configuration was taken directly from cromwell documentation: https://cromwell.readthedocs.io/en/stable/backends/SLURM/).
 
