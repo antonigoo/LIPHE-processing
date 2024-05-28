@@ -4,9 +4,7 @@ There are two versions of this workflow:
 - `Snakefile_SLURM`: in which snakemake is going to submit rules as jobs to the slurm scheduler
 
 ## Running workflow
-```bash
-sbatch batchjob.sh
-```
+Run the different versions of batch jobs to run Snakemake using different executors. 
 
 ## Create DAG
 In a terminal:
