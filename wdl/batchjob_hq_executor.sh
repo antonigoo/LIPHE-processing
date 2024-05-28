@@ -1,9 +1,7 @@
 #!/bin/bash
 #SBATCH --account=project_2008498
 #SBATCH --partition=small
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=4
+#SBATCH --cpus-per-task=3
 #SBATCH --mem-per-cpu=20GB
 #SBATCH --time=00:20:00
 

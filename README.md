@@ -6,6 +6,9 @@ cd wdl
 wget https://github.com/broadinstitute/cromwell/releases/download/86/cromwell-86.jar
 ```
 
+## Running workflow
+Run the different versions of batch jobs to run Cromwell using different executors. 
+
 ### Local run
 ```bash
 module load biojava/11
