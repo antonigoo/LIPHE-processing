@@ -3,7 +3,7 @@
 #SBATCH --account=project_2008498
 #SBATCH --time=00:20:00
 #SBATCH --cpus-per-task=3
-#SBATCH --mem-per-cpu=20G
+#SBATCH --mem-per-cpu=40G
 #SBATCH --partition=small
 
 module purge
