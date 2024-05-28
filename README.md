@@ -20,10 +20,8 @@ nextflow run workflow.nf --base_path "/scratch/project_2008498/antongoo/fgi/next
 ```
 
 ## Run the entire workflow in a batch file
-See `workflow/batchjob.sh` for details.
-```bash
-sbatch batchjob.sh
-```
+Run the different versions of batch jobs to run Nextflow using different executors.
+
 
 ## Slurm integration
 This will create a slurm job for each process. The parameters for a job are specified globally in slurm.config, and they can be overwritten by values specified in the process definition. Set the maximum number of jobs in `slurm.config` 
