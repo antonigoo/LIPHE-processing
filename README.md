@@ -1,5 +1,13 @@
 # LIPHE-processing - Nextflow version
 
+---
+
+This is the companion repository for the MSc thesis "Parallelization and automated workflow approaches in high performance computing for point cloud data processing" (https://aaltodoc.aalto.fi/items/feea2a32-664e-4eb2-8f14-27dc5da234d5).
+
+The latest LiPheKit code is published on Zenodo (https://zenodo.org/records/13763734) alongside a LiPhe data publication (https://doi.org/10.1038/s41597-024-04143-w).
+
+---
+
 In this example, workflow definition file is located in workflow folder. The reason for that is because now, we can use `projectDir` variable for accessing our scripts. Nextflow is running process in a new folder in work directory, so it is hard to hardcode path to a file (the recommended behavior is to make you scripts accessible like any other command line tool).
 
 ## Preparing files
